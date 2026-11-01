@@ -22,8 +22,18 @@ There is no test runner or test suite configured.
 
 React 19 + Vite, plain JavaScript (JSX), no router, state library, or backend.
 
-All application logic and UI live in the single `App` component in `src/App.jsx`: transaction list, form fields, filters, and the derived totals and filtered list, which are recalculated on each render. State is in-memory only, seeded from a hardcoded array, so changes are lost on reload.
+`App` (`src/App.jsx`) owns the `transactions` array and the `categories` list and passes them down to three child components, each in its own file in `src/`:
 
-Styling is plain CSS: global styles in `src/index.css`, component styles in `src/App.css`.
+- `Summary` has no state; it derives the income, expense, and balance totals from all transactions, so filters don't affect them.
+- `TransactionForm` owns the form fields, builds new transactions, and passes them up through `onAdd`.
+- `TransactionList` owns the filter state and renders the filtered table.
 
-Transaction `amount` values are numbers. The form's `amount` state is a string, and `handleSubmit` converts it when creating a transaction.
+State is in-memory only, seeded from a hardcoded array, so changes are lost on reload.
+
+Styling is plain CSS: global styles in `src/index.css`, and styles for all components in `src/App.css`, which only `App` imports.
+
+Transaction `amount` values are numbers. The form's `amount` state is a string, and `TransactionForm` converts it when creating a transaction.
+
+## Known issues
+
+- `TransactionForm` dates new transactions with `toISOString()`, which is UTC, so the date can be a day off from the user's local date.
