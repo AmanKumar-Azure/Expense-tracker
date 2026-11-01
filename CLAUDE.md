@@ -26,7 +26,4 @@ All application logic and UI live in the single `App` component in `src/App.jsx`
 
 Styling is plain CSS: global styles in `src/index.css`, component styles in `src/App.css`.
 
-## Known issues
-
-- Transaction `amount` values are strings, both in the seed data and from the form, so the `reduce` calls that compute totals concatenate instead of adding, which makes the summary cards wrong.
-- The seed entry "Freelance Work" has `type: "expense"` with category `salary`; it looks like it should be income.
+Transaction `amount` values are numbers. The form's `amount` state is a string, and `handleSubmit` converts it when creating a transaction.
