@@ -26,7 +26,9 @@ React 19 + Vite, plain JavaScript (JSX), no router, state library, or backend.
 
 - `Summary` has no state; it derives the income, expense, and balance totals from all transactions, so filters don't affect them.
 - `TransactionForm` owns the form fields, builds new transactions, and passes them up through `onAdd`.
-- `TransactionList` owns the filter state and renders the filtered table.
+- `TransactionList` owns the filter state and the pending-delete state, renders the filtered table, and requests deletions by id through `onDelete` once the user confirms in `ConfirmDialog`.
+
+`ConfirmDialog` (`src/ConfirmDialog.jsx`) is a reusable modal built on the native `<dialog>` element. `TransactionList` renders it only while a delete is pending.
 
 State is in-memory only, seeded from a hardcoded array, so changes are lost on reload.
 
