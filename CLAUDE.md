@@ -22,9 +22,10 @@ There is no test runner or test suite configured.
 
 React 19 + Vite, plain JavaScript (JSX), no router, state library, or backend.
 
-`App` (`src/App.jsx`) owns the `transactions` array and the `categories` list and passes them down to three child components, each in its own file in `src/`:
+`App` (`src/App.jsx`) owns the `transactions` array and the `categories` list and passes them down to four child components, each in its own file in `src/`:
 
 - `Summary` has no state; it derives the income, expense, and balance totals from all transactions, so filters don't affect them.
+- `SpendingChart` has no state; it totals expenses per category from all transactions and renders a vertical Recharts bar chart, sorted largest first.
 - `TransactionForm` owns the form fields, builds new transactions, and passes them up through `onAdd`.
 - `TransactionList` owns the filter state and the pending-delete state, renders the filtered table, and requests deletions by id through `onDelete` once the user confirms in `ConfirmDialog`.
 
