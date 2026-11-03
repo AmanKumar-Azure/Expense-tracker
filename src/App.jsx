@@ -8,6 +8,7 @@ import './App.css'
 
 const CATEGORIES = ["food", "housing", "utilities", "transport", "entertainment", "salary", "other"];
 
+
 function App() {
   const [transactions, setTransactions] = useState(INITIAL_TRANSACTIONS);
 
