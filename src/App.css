@@ -1,167 +1,438 @@
+/* ---------- Page ---------- */
+
 .app {
-  max-width: 800px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 32px 24px 64px;
 }
 
-h1 {
-  margin-bottom: 4px;
+h2 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
 }
 
-.subtitle {
-  margin-bottom: 20px;
-  color: #666;
+/* ---------- Passbook header ---------- */
+
+.passbook {
+  position: relative;
+  overflow: hidden;
+  padding: 28px 36px 32px;
+  border-radius: 16px;
+  background: var(--passbook);
+  color: var(--paper);
+}
+
+.passbook h1 {
+  position: relative;
+  z-index: 1;
+  font-size: 16px;
+  font-weight: 500;
+  color: #B9CBC5;
 }
 
 .summary {
+  margin-top: 28px;
+}
+
+.guilloche {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #8FB3A8;
+  stroke-width: 0.8;
+  opacity: 0.32;
+  -webkit-mask-image: linear-gradient(to right, transparent 20%, #000 65%);
+  mask-image: linear-gradient(to right, transparent 20%, #000 65%);
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.guilloche path {
+  vector-effect: non-scaling-stroke;
+}
+
+.balance-label,
+.balance-figure,
+.totals {
+  position: relative;
+  z-index: 1;
+}
+
+.balance-label {
+  font-size: 15px;
+  color: #B9CBC5;
+}
+
+.balance-figure {
+  font-family: var(--font-condensed);
+  font-size: clamp(48px, 9vw, 88px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  margin-top: 4px;
+}
+
+.balance-figure.is-negative {
+  color: #F2A7AC;
+}
+
+.totals {
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px 40px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(185, 203, 197, 0.3);
 }
 
-.summary-card {
-  flex: 1;
-  border: 1px solid #ddd;
-  padding: 14px;
+.totals dt {
+  font-size: 14px;
+  color: #B9CBC5;
+}
+
+.totals dd {
+  font-size: 20px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Workspace layout ---------- */
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 48px;
+  margin-top: 40px;
+  align-items: start;
+}
+
+.workspace-main {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.workspace-aside {
+  position: sticky;
+  top: 24px;
+}
+
+/* ---------- Shared controls ---------- */
+
+.add-transaction input,
+.add-transaction select,
+.filters select {
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
   background: #fff;
+  font-size: 15px;
 }
 
-.summary-card h3 {
-  font-size: 13px;
-  color: #888;
-  margin-bottom: 4px;
+.add-transaction input:hover,
+.add-transaction select:hover,
+.filters select:hover {
+  border-color: #9FB0AA;
 }
 
-.income-amount {
-  color: green;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.expense-amount {
-  color: red;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.balance-amount {
-  font-size: 20px;
-  font-weight: bold;
-}
+/* ---------- Add transaction ---------- */
 
 .add-transaction {
-  border: 1px solid #ddd;
-  padding: 16px;
-  margin-bottom: 24px;
-  background: #fff;
+  padding: 24px;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--paper-raised);
 }
 
 .add-transaction h2 {
-  font-size: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
-form {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+.add-transaction form {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 16px 12px;
+  align-items: end;
 }
 
-form input,
-form select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-form input[type="text"] {
-  flex: 2;
-}
-
-form input[type="number"] {
-  flex: 1;
-}
-
-form select {
-  flex: 1;
-}
-
-form button {
-  padding: 8px 20px;
-  background: #333;
-  color: #fff;
+.type-toggle {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  justify-self: start;
+  padding: 3px;
   border: none;
+  border-radius: 10px;
+  background: #DDE5E1;
+}
+
+.type-option {
+  position: relative;
   cursor: pointer;
+}
+
+.type-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.type-option span {
+  display: block;
+  padding: 6px 18px;
+  border-radius: 7px;
   font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
-.transactions {
-  margin-bottom: 24px;
+.type-option input:checked + span {
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(23, 36, 63, 0.12);
 }
 
-.transactions h2 {
-  font-size: 16px;
+.type-expense input:checked + span {
+  color: var(--debit);
+}
+
+.type-income input:checked + span {
+  color: var(--income);
+}
+
+.type-option input:focus-visible + span {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.field label {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.field input,
+.field select {
+  width: 100%;
+}
+
+.amount-input {
+  position: relative;
+}
+
+.amount-input span {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-soft);
+  pointer-events: none;
+}
+
+.add-transaction .amount-input input {
+  padding-left: 26px;
+  font-variant-numeric: tabular-nums;
+}
+
+.add-btn {
+  height: 42px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--paper-raised);
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.add-btn:hover {
+  background: #2A3D66;
+}
+
+/* ---------- Transactions ledger ---------- */
+
+.transactions-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   margin-bottom: 12px;
 }
 
 .filters {
   display: flex;
   gap: 8px;
-  margin-bottom: 12px;
 }
 
 .filters select {
-  padding: 6px;
-  border: 1px solid #ccc;
-  font-size: 13px;
+  height: 36px;
+  font-size: 14px;
+}
+
+.table-wrap {
+  overflow-x: auto;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
 }
 
-thead {
-  background: #f5f5f5;
-}
-
-th, td {
-  padding: 10px;
+th,
+td {
+  padding: 12px 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
-  font-size: 14px;
+  border-bottom: 1px solid var(--rule);
+}
+
+th:first-child,
+td:first-child {
+  padding-left: 0;
+}
+
+th:last-child,
+td:last-child {
+  padding-right: 0;
 }
 
 th {
-  font-size: 12px;
-  color: #888;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  border-bottom: 2px solid var(--ink);
+}
+
+td {
+  font-size: 15px;
+}
+
+tbody tr:hover {
+  background: rgba(23, 36, 63, 0.03);
+}
+
+.col-date {
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.col-description {
+  font-weight: 500;
+}
+
+.col-category {
+  color: var(--ink-soft);
+}
+
+th.col-amount,
+td.col-amount {
+  text-align: right;
+  white-space: nowrap;
+}
+
+td.col-amount {
+  font-weight: 500;
+}
+
+.income-amount {
+  color: var(--income);
+}
+
+.expense-amount {
+  color: var(--debit);
+}
+
+.col-action {
+  width: 1%;
+  text-align: right;
 }
 
 .delete-btn {
-  padding: 4px 10px;
-  background: #eee;
-  border: 1px solid #ccc;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  font-size: 14px;
+  color: var(--ink-soft);
   cursor: pointer;
-  font-size: 12px;
-  color: #333;
+  transition: color 150ms ease, background-color 150ms ease;
 }
+
+.delete-btn:hover {
+  color: var(--debit);
+  background: rgba(168, 50, 58, 0.08);
+}
+
+.table-empty {
+  padding: 32px 0;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+/* ---------- Spending chart ---------- */
+
+.spending-chart h2 {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.spending-chart text {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-empty {
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+/* ---------- Confirm dialog ---------- */
 
 .confirm-dialog {
   margin: auto;
-  width: min(400px, 90vw);
-  padding: 20px;
-  border: 1px solid #ddd;
-  background: #fff;
+  width: min(420px, 90vw);
+  padding: 24px;
+  border: none;
+  border-radius: 14px;
+  background: var(--paper-raised);
+  color: var(--ink);
+  box-shadow: 0 20px 50px rgba(23, 36, 63, 0.25);
+}
+
+.confirm-dialog[open] {
+  animation: dialog-in 180ms ease-out;
 }
 
 .confirm-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(23, 36, 63, 0.45);
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
 }
 
 .confirm-dialog p {
-  margin-bottom: 16px;
-  font-size: 14px;
+  margin-bottom: 20px;
+  font-size: 16px;
 }
 
 .confirm-actions {
@@ -172,36 +443,84 @@ th {
 
 .cancel-btn,
 .confirm-btn {
-  padding: 8px 16px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 14px;
 }
 
 .cancel-btn {
-  background: #eee;
-  border: 1px solid #ccc;
-  color: #333;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink);
 }
 
-.confirm-btn {
-  background: #c62828;
-  border: 1px solid #c62828;
-  color: #fff;
-}
-
-.spending-chart {
-  border: 1px solid #ddd;
-  padding: 16px;
-  margin-bottom: 24px;
+.cancel-btn:hover {
   background: #fff;
 }
 
-.spending-chart h2 {
-  font-size: 16px;
-  margin-bottom: 12px;
+.confirm-btn {
+  background: var(--debit);
+  border: 1px solid var(--debit);
+  color: #fff;
 }
 
-.chart-empty {
-  color: #888;
-  font-size: 14px;
+.confirm-btn:hover {
+  background: #8E2830;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .workspace {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+  }
+
+  .workspace-aside {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .app {
+    padding: 16px 16px 48px;
+  }
+
+  .passbook {
+    padding: 22px 22px 26px;
+  }
+
+  .add-transaction {
+    padding: 20px;
+  }
+
+  .add-transaction form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .field-description,
+  .add-btn {
+    grid-column: 1 / -1;
+  }
+
+  th,
+  td {
+    padding: 12px 6px;
+    font-size: 14px;
+  }
+
+  .delete-btn {
+    padding: 4px;
+  }
+
+  .col-category {
+    display: none;
+  }
+
+  th:nth-child(3) {
+    display: none;
+  }
 }
