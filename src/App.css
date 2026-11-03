@@ -158,7 +158,8 @@ h2 {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr auto;
   gap: 16px 12px;
-  align-items: end;
+  /* Top-aligned so an error message under one field doesn't shift the others. */
+  align-items: start;
 }
 
 .type-toggle {
@@ -245,7 +246,21 @@ h2 {
   font-variant-numeric: tabular-nums;
 }
 
+.add-transaction input[aria-invalid="true"],
+.add-transaction input[aria-invalid="true"]:hover {
+  border-color: var(--debit);
+  box-shadow: 0 0 0 1px var(--debit);
+}
+
+.field-error {
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--debit);
+}
+
 .add-btn {
+  /* Lines the button up with the inputs: label line-height (14px × 1.5) + field gap (6px). */
+  margin-top: 27px;
   height: 42px;
   padding: 0 20px;
   border: none;
@@ -504,6 +519,10 @@ td.col-amount {
   .field-description,
   .add-btn {
     grid-column: 1 / -1;
+  }
+
+  .add-btn {
+    margin-top: 0;
   }
 
   th,

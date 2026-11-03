@@ -1,28 +1,68 @@
-import { useState } from 'react'
-import { formatCategory } from './format.js'
+import { useRef, useState } from 'react'
+import { formatCategory, todayLocalISO } from './format.js'
 
 const TYPES = [
   { value: "expense", label: "Expense" },
   { value: "income", label: "Income" },
 ];
 
+// Returns an error message per invalid field; an empty object means the input is valid.
+function validate(description, amount) {
+  const errors = {};
+  if (!description.trim()) {
+    errors.description = "Enter a description.";
+  }
+  if (amount.trim() === "") {
+    errors.amount = "Enter an amount.";
+  } else {
+    const value = Number(amount);
+    if (!Number.isFinite(value) || value <= 0) {
+      errors.amount = "Enter an amount greater than $0.";
+    }
+  }
+  return errors;
+}
+
 function TransactionForm({ categories, onAdd }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("expense");
   const [category, setCategory] = useState("food");
+  const [errors, setErrors] = useState({});
+  const descriptionRef = useRef(null);
+  const amountRef = useRef(null);
+
+  const clearError = (field) => {
+    setErrors(prev => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!description || !amount) return;
+    const newErrors = validate(description, amount);
+    setErrors(newErrors);
+    if (newErrors.description) {
+      descriptionRef.current.focus();
+      return;
+    }
+    if (newErrors.amount) {
+      amountRef.current.focus();
+      return;
+    }
 
+    const trimmedDescription = description.trim();
+    const value = Number(amount);
     onAdd({
-      id: Date.now(),
-      description,
-      amount: Number(amount),
+      id: crypto.randomUUID(),
+      description: trimmedDescription,
+      amount: value,
       type,
       category,
-      date: new Date().toISOString().split('T')[0],
+      date: todayLocalISO(),
     });
     setDescription("");
     setAmount("");
@@ -33,7 +73,7 @@ function TransactionForm({ categories, onAdd }) {
   return (
     <section className="add-transaction" aria-labelledby="add-heading">
       <h2 id="add-heading">Add a transaction</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <fieldset className="type-toggle">
           <legend className="visually-hidden">Type</legend>
           {TYPES.map(option => (
@@ -53,12 +93,21 @@ function TransactionForm({ categories, onAdd }) {
         <div className="field field-description">
           <label htmlFor="tx-description">Description</label>
           <input
+            ref={descriptionRef}
             id="tx-description"
             type="text"
             placeholder="e.g. Groceries"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            aria-invalid={errors.description ? true : undefined}
+            aria-describedby={errors.description ? "tx-description-error" : undefined}
+            onChange={(e) => {
+              setDescription(e.target.value);
+              clearError("description");
+            }}
           />
+          {errors.description && (
+            <p id="tx-description-error" className="field-error">{errors.description}</p>
+          )}
         </div>
 
         <div className="field">
@@ -66,16 +115,25 @@ function TransactionForm({ categories, onAdd }) {
           <div className="amount-input">
             <span aria-hidden="true">$</span>
             <input
+              ref={amountRef}
               id="tx-amount"
               type="number"
               inputMode="decimal"
-              min="0"
+              min="0.01"
               step="0.01"
               placeholder="0.00"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              aria-invalid={errors.amount ? true : undefined}
+              aria-describedby={errors.amount ? "tx-amount-error" : undefined}
+              onChange={(e) => {
+                setAmount(e.target.value);
+                clearError("amount");
+              }}
             />
           </div>
+          {errors.amount && (
+            <p id="tx-amount-error" className="field-error">{errors.amount}</p>
+          )}
         </div>
 
         <div className="field">

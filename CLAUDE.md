@@ -39,8 +39,6 @@ State is in-memory only, seeded from a hardcoded array, so changes are lost on r
 
 Styling is plain CSS: global styles and the color/font tokens (CSS custom properties) live in `src/index.css`, and styles for all components live in `src/App.css`, which only `App` imports. The IBM Plex Sans fonts load from Google Fonts in `index.html`. `SpendingChart` repeats a few of the hex colors because Recharts takes colors as props.
 
-Transaction `amount` values are numbers. The form's `amount` state is a string, and `TransactionForm` converts it when creating a transaction.
+Transaction `amount` values are numbers. The form's `amount` state is a string, and `TransactionForm` converts it when creating a transaction. It rejects blank (whitespace-only) descriptions and amounts of zero or less, trims the description, dates the transaction with `todayLocalISO()` from `format.js` (local time, not UTC), and gives it a `crypto.randomUUID()` string id. Seed transactions keep numeric ids 1–8.
 
-## Known issues
-
-- `TransactionForm` dates new transactions with `toISOString()`, which is UTC, so the date can be a day off from the user's local date.
+The seed transactions (`INITIAL_TRANSACTIONS`) live in `src/constants.js`; `CATEGORIES` is a module-level constant in `App.jsx`; and `App` updates `transactions` with the functional `setTransactions(prev => ...)` form.
